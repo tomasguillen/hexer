@@ -1,4 +1,4 @@
-#ifndef HEXER_H // This is the include guard macro
+#ifndef HEXER_H  // This is the include guard macro
 #define HEXER_H 1
 #include <iomanip>
 #include <iostream>
@@ -22,13 +22,18 @@
 
 */
 
-inline void print_as_hex(char character) {
+// prints passed character
+inline void print_as_hex(const char character) {
   std::cout << std::setw(2) << std::setfill('0') << std::hex
             << static_cast<int>(static_cast<unsigned char>(character));
 }
+// when called with just character and pos it just prints that character if
+// called with highlight_offset and highlight_size it checks if pos is inside
+// that range and then prints the character red
 inline void print_as_hex_highlighted(
-    char character, size_t pos, std::optional<size_t> highlight_offset = {},
-    std::optional<size_t> highlight_size = {}) {
+    const char character, const size_t pos,
+    const std::optional<size_t> highlight_offset = {},
+    const std::optional<size_t> highlight_size = {}) {
   if (highlight_offset && highlight_size && pos >= highlight_offset.value() &&
       highlight_offset.value() + highlight_size.value() > pos) {
     std::cout << "\033[1;31m";
@@ -38,11 +43,14 @@ inline void print_as_hex_highlighted(
     print_as_hex(character);
   }
 }
-
-inline void print_as_hex(auto &object, size_t size,
-                         std::optional<size_t> highlight_offset = {},
-                         std::optional<size_t> highlight_size = {}) {
-  auto &&char_pointer = reinterpret_cast<char *>(&object);
+// INPUT: pass an object and a size [offset from object address] and/or an
+// optional highlight range [offset from object address, size of range]
+// SIDEEFFECT: pretty prints the object memory address up to the address of
+// object+size in hexadecimal
+inline void print_as_hex(const auto &object, size_t size,
+                         const std::optional<size_t> highlight_offset = {},
+                         const std::optional<size_t> highlight_size = {}) {
+  auto &&char_pointer = reinterpret_cast<const char *>(&object);
   std::cout << "\n";
   if (size % 2 != 0) --size;
   std::cout << std::setw(8) << std::setfill('0') << std::dec << int(0) << "\t";
@@ -62,11 +70,13 @@ inline void print_as_hex(auto &object, size_t size,
   }
   std::cout << std::dec << '\n';
 }
-
+// INPUT: pass an object and/or an optional highlight range [offset from object
+// address, size of range] SIDEEFFECT: pretty prints the object memory address
+// in hexadecimal
 template <class Type>
-inline void print_as_hex(Type &object,
-                         std::optional<size_t> highlight_offset = {},
-                         std::optional<size_t> highlight_size = {}) {
+inline void print_as_hex(const Type &object,
+                         const std::optional<size_t> highlight_offset = {},
+                         const std::optional<size_t> highlight_size = {}) {
   print_as_hex(object, sizeof(Type), highlight_offset, highlight_size);
 }
 
