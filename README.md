@@ -259,16 +259,6 @@ Let's say we want to inspect the bits of **composed_object.simple_object.just_an
     int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
     std::string id{"default"};  // <-- We want to highlight id member
   };
-  TestObject object{};
-  std::cout << "\nObject as hex, highlight bytes of TestObject::id member:";
-  hexer::print_object_as_hex<hexer::print_as_bits, 4>(
-      object, offsetof(TestObject, id), sizeof(std::string));
-}
-void example5() {
-  struct TestObject {
-    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
-    std::string id{"default"};  // <-- We want to highlight id member
-  };
   struct TestObjectComposed {
     int just_an_int_outer{}, just_an_int_outer2{}, just_an_int_outer3 = 1;
     TestObject simple_object{};
