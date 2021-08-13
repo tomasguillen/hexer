@@ -1,4 +1,30 @@
 ## C++ Hexer - Pretty Print C++ objects or arbitrary ranges of memory to hexadecimal or binary form
+## Adding Hexer to your project
+### 1. CMake 
+```
+git clone https://github.com/tomasguillen/hexer.git
+```
+Modify your CMakeLists.txt:
+```
+add_subdirectory(hexer)
+
+add_executable(target_name ...
+target_link_libraries(target_name PRIVATE Hexer ...
+```
+and in your code add:
+```
+#include <hexer.hpp>
+...
+```
+### 2. Without CMake
+```
+git clone https://github.com/tomasguillen/hexer.git
+```
+then in your code add:
+```
+#include "hexer/hexer.hpp"
+...
+```
 ## How to use
 ### Example 1
 Let's say we want to print a simple object, and we want to highlight the bytes of the _id_ member (**these two function calls will do the same**):
