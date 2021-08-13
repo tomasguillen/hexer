@@ -25,13 +25,13 @@ Object as hex, highlight bytes of TestObject::id member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 0000 0000\
 00000016&emsp;        **8d60 3ebd 7fff 0000 0007 0000 0000 0000**    // <- this are the bytes\
 00000032&emsp;        **6564 6166 6c75 0074 d740 4bc8 5588 0000**    //    of our "id" string\
-00000048\
+00000048
 
 address_range as hex, highlight bytes of TestObject::id member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 0000 0000\
 00000016&emsp;        **8d60 3ebd 7fff 0000 0007 0000 0000 0000**    // same as above\
 00000032&emsp;        **6564 6166 6c75 0074 d740 4bc8 5588 0000**    // \
-00000048\
+00000048
 
 ### Example 2
 Let's say we want to print a more complex object, and we want to highlight the bytes of the _id_ member:
@@ -66,7 +66,7 @@ Let's say we want to print a more complex object, and we want to highlight the b
                                     sizeof(std::string), 0);
 ```
 Will Output:\
-\
+
 Object as hex, highlight bytes of TestObjectComposed::id_outer member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
 00000016&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
@@ -74,8 +74,8 @@ Object as hex, highlight bytes of TestObjectComposed::id_outer member:\
 00000048&emsp;        6564 6166 6c75 0074 ff90 de2f 7f59 0000\
 00000064&emsp;        **6f70 9313 7ffd 0000 000c 0000 0000 0000**\
 00000080&emsp;        **756f 6574 6472 6665 7561 746c 5500 0000**\
-00000096\
-\
+00000096
+
 AddressRange as hex, highlight bytes of TestObjectComposed::id_outer member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
 00000016&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
@@ -83,15 +83,15 @@ AddressRange as hex, highlight bytes of TestObjectComposed::id_outer member:\
 00000048&emsp;        6564 6166 6c75 0074 ff90 de2f 7f59 0000\
 00000064&emsp;        **6f70 9313 7ffd 0000 000c 0000 0000 0000**\
 00000080&emsp;        **756f 6574 6472 6665 7561 746c 5500 0000**\
-00000096\
-\
+00000096
+
 AddressRange as hex, highlight bytes of TestObjectComposed::id_outer member (without last argument 'start_offset'):\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
 00000016&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
 00000032&emsp;        6f50 9313 7ffd 0000 0007 0000 0000 0000\
 00000048&emsp;        6564 6166 6c75 0074 ff90 de2f 7f59 0000\
 00000064&emsp;        **6f70 9313 7ffd 0000 000c 0000 0000 0000**\
-00000080&emsp;        **756f 6574 6472 6665 7561 746c 5500 0000**\
+00000080&emsp;        **756f 6574 6472 6665 7561 746c 5500 0000**
 ### Example 3
 Let's say we want to print a more complex object, and we want to highlight the bytes of the _id_ member:
 ```c++
@@ -127,11 +127,11 @@ Let's say we want to print a more complex object, and we want to highlight the b
                                  // simple_object address
 ```
 Will Output:\
-\
+
 Here we make use of all the features of print_address_range_as_hex (printing the member 'simple_object' and highlighting the bytes of its 'just_an_int3' member):\
-00000000&emsp        0000 0000 0000 0000 **0001 0000** 0000 0000\
-00000032&emsp        52b0 8299 7ffc 0000 0007 0000 0000 0000\
-00000048&emsp        6564 6166 6c75 0074 7717 4b9d 7fd7 0000\
+00000000&emsp;        0000 0000 0000 0000 **0001 0000** 0000 0000\
+00000032&emsp;        52b0 8299 7ffc 0000 0007 0000 0000 0000\
+00000048&emsp;        6564 6166 6c75 0074 7717 4b9d 7fd7 0000\
 00000064
 ## API Description
 ### Just Pass An Object To Print (optional highlight range)
