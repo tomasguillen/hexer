@@ -1,5 +1,6 @@
 #ifndef HEXER_H  // This is the include guard macro
 #define HEXER_H 1
+#include <cassert>
 #include <iomanip>
 #include <iostream>
 #include <optional>
@@ -22,6 +23,22 @@
 
 */
 
+#ifndef NDEBUG
+#define HEXER_ASSERT(condition, message)                                 \
+  do {                                                                   \
+    if (!(condition)) {                                                  \
+      std::cerr << "Assertion `" #condition "` failed in " << __FILE__   \
+                << " line " << __LINE__ << ": " << message << std::endl; \
+      std::terminate();                                                  \
+    }                                                                    \
+  } while (false)
+#else
+#define HEXER_ASSERT(condition, message) \
+  do {                                   \
+  } while (false)
+#endif
+
+namespace hexer {
 // prints passed character
 inline void print_as_hex(const char character) {
   std::cout << std::setw(2) << std::setfill('0') << std::hex
@@ -47,14 +64,34 @@ inline void print_as_hex_highlighted(
 // optional highlight range [offset from object address, size of range]
 // SIDEEFFECT: pretty prints the object memory address up to the address of
 // object+size in hexadecimal
-inline void print_as_hex(const auto &object, size_t size,
-                         const std::optional<size_t> highlight_offset = {},
-                         const std::optional<size_t> highlight_size = {}) {
+template <class Type>
+inline void print_address_range_as_hex(
+    const Type &object, size_t size,
+    std::optional<size_t> highlight_offset = {},
+    std::optional<size_t> highlight_size = {},
+    std::optional<size_t> start_offset = {}) {
+  HEXER_ASSERT(size <= sizeof(Type),
+               "HEXER_HELP: size="
+                   << size
+                   << " Parameter CANNOT Be Larger Than sizeof(Object Type)="
+                   << sizeof(Type)
+                   << ". Check that you are passing the right size to hexer");
+  // NOLINTNEXTLINE
   auto &&char_pointer = reinterpret_cast<const char *>(&object);
+  auto start_byte = 0;
+  if (start_offset) {
+    HEXER_ASSERT(start_offset < size,
+                 "HEXER_HELP: start_offset="
+                     << start_offset.value()
+                     << "Parameter CANNOT Be Larger Than size=" << size
+                     << " Parameter "
+                        "OF OBJECT TO PRINT");
+    start_byte = start_offset.value();
+  }
   std::cout << "\n";
   if (size % 2 != 0) --size;
   std::cout << std::setw(8) << std::setfill('0') << std::dec << int(0) << "\t";
-  for (size_t group = 1, i = 0; i < size; i += 2, ++group) {
+  for (size_t group = 1, i = start_byte; i < size; i += 2, ++group) {
     print_as_hex_highlighted(char_pointer[i + 1], i + 1, highlight_offset,
                              highlight_size);
     print_as_hex_highlighted(char_pointer[i], i, highlight_offset,
@@ -74,10 +111,11 @@ inline void print_as_hex(const auto &object, size_t size,
 // address, size of range] SIDEEFFECT: pretty prints the object memory address
 // in hexadecimal
 template <class Type>
-inline void print_as_hex(const Type &object,
-                         const std::optional<size_t> highlight_offset = {},
-                         const std::optional<size_t> highlight_size = {}) {
-  print_as_hex(object, sizeof(Type), highlight_offset, highlight_size);
+inline void print_object_as_hex(
+    const Type &object, const std::optional<size_t> highlight_offset = {},
+    const std::optional<size_t> highlight_size = {}) {
+  print_address_range_as_hex(object, sizeof(Type), highlight_offset,
+                             highlight_size);
 }
 
 void print_vec(auto &vector_data) {
@@ -87,4 +125,5 @@ void print_vec(auto &vector_data) {
   }
   std::cout << "\nEND\n";
 }
+}  // namespace hexer
 #endif
