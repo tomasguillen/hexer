@@ -10,9 +10,9 @@ void example1() {
   std::cout << "\nObject as hex, highlight bytes of TestObject::id member:";
   hexer::print_object_as_hex(object, offsetof(TestObject, id),
                              sizeof(std::string));
+
   std::cout
       << "\nAddressRange as hex, highlight bytes of TestObject::id member:";
-
   hexer::print_address_range_as_hex(object, sizeof(TestObject),
                                     offsetof(TestObject, id),
                                     sizeof(std::string), 0);

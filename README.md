@@ -12,14 +12,13 @@ Let's say we want to print a simple object, and we want to highlight the bytes o
   std::cout << "\nObject as hex, highlight bytes of TestObject::id member:";
   hexer::print_object_as_hex(object, offsetof(TestObject, id),
                              sizeof(std::string));
-  std::cout << "\nAddressRange as hex, highlight bytes of TestObject::id member:";
 
+  std::cout << "\nAddressRange as hex, highlight bytes of TestObject::id member:";
   hexer::print_address_range_as_hex(object, sizeof(TestObject),
                                     offsetof(TestObject, id),
                                     sizeof(std::string), 0);
 ```
 Will Output:\
-\
 
 Object as hex, highlight bytes of TestObject::id member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 0000 0000\
@@ -48,16 +47,19 @@ Let's say we want to print a more complex object, and we want to highlight the b
   };
 
   TestObjectComposed composed_object{};
+
   std::cout << "\nObject as hex, highlight bytes of "
                "TestObjectComposed::id_outer member:";
   hexer::print_object_as_hex(composed_object,
                              offsetof(TestObjectComposed, id_outer),
                              sizeof(std::string));
+
   std::cout << "\nAddressRange as hex, highlight bytes of "
                "TestObjectComposed::id_outer member:";
   hexer::print_address_range_as_hex(composed_object, sizeof(TestObjectComposed),
                                     offsetof(TestObjectComposed, id_outer),
                                     sizeof(std::string), 0);
+  
   std::cout << "\nAddressRange as hex, highlight bytes of "
                "TestObjectComposed::id_outer member (without last argument "
                "'start_offset'):";
@@ -106,10 +108,12 @@ Let's say we want to print a more complex object, and we want to highlight the b
     std::string id_outer{"outerdefault"};
   };
   TestObjectComposed composed_object{};
+  
   std::cout
       << "\nHere we make use of all the features of "
          "print_address_range_as_hex (printing the member 'simple_object' "
          "and highlighting the bytes of its 'just_an_int3' member):";
+  
   hexer::print_address_range_as_hex(
       composed_object,  // object we want to print
       offsetof(TestObjectComposed,
