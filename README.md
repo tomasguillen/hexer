@@ -18,7 +18,7 @@ Let's say we want to print a simple object, and we want to highlight the bytes o
                                     offsetof(TestObject, id),
                                     sizeof(std::string), 0);
 ```
-Will Output:\
+Will Output:
 
 Object as hex, highlight bytes of TestObject::id member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 0000 0000\
@@ -67,7 +67,7 @@ Let's say we want to print a more complex object, and we want to highlight the b
                                     offsetof(TestObjectComposed, id_outer),
                                     sizeof(std::string), 0);
 ```
-Will Output:\
+Will Output:
 
 Object as hex, highlight bytes of TestObjectComposed::id_outer member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
@@ -130,7 +130,7 @@ Let's say we want to print a more complex object, and we want to highlight the b
                simple_object));  // we will start printing bytes at the start of
                                  // simple_object address
 ```
-Will Output:\
+Will Output:
 
 Here we make use of all the features of print_address_range_as_hex (printing the member 'simple_object' and highlighting the bytes of its 'just_an_int3' member):\
 00000000&emsp;        0000 0000 0000 0000 **0001 0000** 0000 0000\
@@ -145,8 +145,9 @@ void print_object_as_hex(
     const Type &object, const std::optional<size_t> highlight_offset = {},
     const std::optional<size_t> highlight_size = {})
 ```
-INPUT: pass an object and/or an optional highlight range [offset from object
-address, size of range] SIDEEFFECT: pretty prints the object memory address
+**INPUT:** pass an object and/or an optional highlight range [offset from object
+address, size of range]\
+**SIDEEFFECT:** pretty prints the object memory address
 in hexadecimal
 
 ### A Pointer And Size To Print (optional highlight range, and optional start offset for the range)
@@ -158,7 +159,7 @@ void print_address_range_as_hex(
     std::optional<size_t> highlight_size = {},
     std::optional<size_t> start_offset = {})
 ```
-INPUT: pass an object pointer and a size [offset from object address] and/or an
-optional highlight range [offset from object address, size of range]
-SIDEEFFECT: pretty prints the address range up to the address of
+**INPUT:** pass an object pointer and a size [offset from object address] and/or an
+optional highlight range [offset from object address, size of range]\
+**SIDEEFFECT:** pretty prints the address range up to the address of
 object+size in hexadecimal
