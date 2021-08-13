@@ -200,10 +200,12 @@ inline void print_object_as_hex(
     const Type &object, const std::optional<size_t> highlight_offset = {},
     const std::optional<size_t> highlight_size = {})
 ```
-#####**INPUT:** pass an object and/or an optional highlight range [offset from object
+#####INPUT:
+pass an object and/or an optional highlight range [offset from object
 address, size of range]\
-#####**SIDEEFFECT:** pretty prints the object memory address in hexadecimal, with optional highlighting
-#####**TEMPLATE PARAMETERS:**
+#####SIDEEFFECT:
+pretty prints the object memory address in hexadecimal, with optional highlighting
+#####TEMPLATE PARAMETERS:
 1. **PrintFunction:** A function that prints a single character. Used to format each character. Hexer has 2 available functions(default =**print_as_hex**):
 a. ```c++print_as_hex('\0')``` will print ```00```; ```c++print_as_bits('a')``` will print ```61```\
 **inline void print_as_hex(const char character)**
@@ -212,7 +214,7 @@ b. ```c++print_as_bits('\0')``` will print ```00000000```; ```c++print_as_bits('
 inline void print_as_bits(const char character)**
 2. **NewLineAfterNElements:** The number of columns our output will have defaults to 8
 3. **HighlightedPrintFunction:** Same as **PrintFunction** but for highlighted bytes. This way we can have highlighted bytes in hex or binary, independently from **PrintFunction**.
-#####**FUNCTION PARAMETERS:**
+#####FUNCTION PARAMETERS:
 1. **object:** The object we want hexer to print.
 3. **highlight_offset:** An offset at which hexer will start highlighting bytes.
 4. **highlight_size:** A size after which hexer will stop highlighting bytes.
@@ -228,12 +230,13 @@ inline void print_address_range_as_hex(
     std::optional<size_t> highlight_size = {},
     std::optional<size_t> start_offset = {})
 ```
-#####**INPUT:** pass an object pointer and a size [offset from object address], and/or an
+#####INPUT:
+pass an object pointer and a size [offset from object address], and/or an
 optional highlight range [offset from object address, size of range], and or an 
-optional start_offset
-#####**SIDEEFFECT:**
+optional **start_offset**
+#####SIDEEFFECT:
 pretty prints the address range up to the address of object+size in hexadecimal with optional highlighting and start_offset
-#####**TEMPLATE PARAMETERS:**
+#####TEMPLATE PARAMETERS:
 1. **PrintFunction:** A function that prints a single character. Used to format each character. Hexer has 2 available functions(default =**print_as_hex**):
 a. ```c++print_as_hex('\0')``` will print ```00```; ```c++print_as_bits('a')``` will print ```61```\
 **inline void print_as_hex(const char character)**
@@ -242,7 +245,7 @@ b. ```c++print_as_bits('\0')``` will print ```00000000```; ```c++print_as_bits('
 inline void print_as_bits(const char character)**
 2. **NewLineAfterNElements:** The number of columns our output will have defaults to 8
 3. **HighlightedPrintFunction:** Same as **PrintFunction** but for highlighted bytes. This way we can have highlighted bytes in hex or binary, independently from **PrintFunction**.
-#####**FUNCTION PARAMETERS:**
+#####FUNCTION PARAMETERS:
 1. **object:** The object we want hexer to print.
 2. **size:** An offset at which hexer will stop printing bytes.
 3. **highlight_offset:** An offset at which hexer will start highlighting bytes.
