@@ -137,7 +137,7 @@ void example5a() {
   };
   TestObjectComposed composed_object{};
 
-  std::cout << "\nAddress of composed_object.simple_object as hexadecimal with "
+  std::cout << "EXAMPLE5a: \nAddress of composed_object.simple_object as hexadecimal with "
                "composed_object.simple_object.just_an_int3 highlighted and in "
                "binary format";
   hexer::print_address_range_as_hex<hexer::print_as_hex, 8,
@@ -169,10 +169,10 @@ void example5b() {
   };
   TestObjectComposed composed_object{};
 
-  std::cout << "\nAddress of composed_object.simple_object as hexadecimal with "
+  std::cout << "EXAMPLE5b: \nAddress of composed_object.simple_object as hexadecimal with "
                "composed_object.simple_object.just_an_int3 highlighted and in "
                "binary format";
-  hexer::print_address_range_as_hex<hexer::print_as_hex, 8,
+  hexer::print_object_as_hex<hexer::print_as_hex, 8,
                                     hexer::print_as_bits>(
       composed_object.simple_object,  // object we want to print
       offsetof(
@@ -184,11 +184,11 @@ void example5b() {
                                   // simple_object.just_an_int3
 }
 auto main() -> int {
-  //example1();
-  //example2();
-  //example3a();
-  //example3b();
+  example1();
+  example2();
+  example3a();
+  example3b();
   example4();
-  //example5a();
-  //example5b();
+  example5a();
+  example5b();
 }

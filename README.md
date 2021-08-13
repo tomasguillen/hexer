@@ -178,14 +178,15 @@ Same as example 3 using **print_object_as_hex** but with everything printed as b
   hexer::print_object_as_hex<hexer::print_as_bits, 4, hexer::print_as_bits>(
       object, offsetof(TestObject, id), sizeof(std::string));
 ```
-This will print
-Object as hex, highlight bytes of TestObject::id member:
-00000000        0000000000000000 0000000000000000 0000000000000000 0000000000000000
-00000008        0000000000000001 0000000000000000 0111111011111111 0000000000000000
-00000016        0000101101000000 1101100100001000 0111111111111101 0000000000000000
-00000024        0000000000000111 0000000000000000 0000000000000000 0000000000000000
-00000032        0110010101100100 0110000101100110 0110110001110101 0000000001110100
-00000040        1100000110001000 0101110000010000 0111111011111111 0000000000000000
+This will print:
+
+Object as hex, highlight bytes of TestObject::id member:\
+00000000&emsp;        0000000000000000 0000000000000000 0000000000000000 0000000000000000\
+00000008&emsp;        0000000000000001 0000000000000000 0111111011111111 0000000000000000\
+00000016&emsp;        0000101101000000 1101100100001000 0111111111111101 0000000000000000\
+00000024&emsp;        0000000000000111 0000000000000000 0000000000000000 0000000000000000\
+00000032&emsp;        0110010101100100 0110000101100110 0110110001110101 0000000001110100\
+00000040&emsp;        1100000110001000 0101110000010000 0111111011111111 0000000000000000\
 00000048
 
 ## API Description
@@ -314,7 +315,7 @@ We can achieve the same with **print_object_as_hex**:
   std::cout << "\nAddress of composed_object.simple_object as hexadecimal with "
                "composed_object.simple_object.just_an_int3 highlighted and in "
                "binary format";
-  hexer::print_address_range_as_hex<hexer::print_as_hex, 8,
+  hexer::print_object_as_hex<hexer::print_as_hex, 8,
                                     hexer::print_as_bits>(
       composed_object.simple_object,  // object we want to print
       offsetof(
