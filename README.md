@@ -18,7 +18,7 @@ Let's say we want to print a simple object, and we want to highlight the bytes o
                                     offsetof(TestObject, id),
                                     sizeof(std::string), 0);
 ```
-Will Output:
+This will print:
 
 Object as hex, highlight bytes of TestObject::id member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 0000 0000\
@@ -67,7 +67,7 @@ Let's say we want to print a more complex object, and we want to highlight the b
                                     offsetof(TestObjectComposed, id_outer),
                                     sizeof(std::string), 0);
 ```
-Will Output:
+This will print:
 
 Object as hex, highlight bytes of TestObjectComposed::id_outer member:\
 00000000&emsp;        0000 0000 0000 0000 0001 0000 7f59 0000\
@@ -130,7 +130,7 @@ Let's say we want to print a more complex object, and we want to highlight the b
                simple_object));  // we will start printing bytes at the start of
                                  // simple_object address
 ```
-Will Output:
+This will print:
 
 Here we make use of all the features of print_address_range_as_hex (printing the member 'simple_object' and highlighting the bytes of its 'just_an_int3' member):\
 00000000&emsp;        0000 0000 0000 0000 **0001 0000** 0000 0000\
@@ -152,14 +152,81 @@ in hexadecimal
 
 ### A Pointer And Size To Print (optional highlight range, and optional start offset for the range)
 ```c++
-template <class Type>
-void print_address_range_as_hex(
+template <void PrintFunction(const char) = print_as_hex,
+          size_t NewLineAfterNElements = 8,
+          void HighlightedPrintFunction(const char) = print_as_hex, class Type>
+inline void print_address_range_as_hex(
     const Type &object, size_t size,
     std::optional<size_t> highlight_offset = {},
     std::optional<size_t> highlight_size = {},
     std::optional<size_t> start_offset = {})
 ```
-**INPUT:** pass an object pointer and a size [offset from object address] and/or an
-optional highlight range [offset from object address, size of range]\
+**TEMPLATE PARAMETERS:**
+1. **PrintFunction:** A function that prints a single character. Used to format each character. Hexer has 2 available functions(default =**print_as_hex**):
+a. ```c++print_as_hex('\0')``` will print ```00```; ```c++print_as_bits('a')``` will print ```61```\
+**inline void print_as_hex(const char character)**
+b. ```c++print_as_bits('\0')``` will print ```00000000```; ```c++print_as_bits('a')``` will print ```01100001```\
+**template <size_t BitsToPrint = 8>\
+inline void print_as_bits(const char character)**
+2. **NewLineAfterNElements:** The number of columns our output will have defaults to 8
+3. **HighlightedPrintFunction:** Same as **PrintFunction** but for highlighted bytes. This way we can have highlighted bytes in hex or binary, independently from **PrintFunction**.
+**FUNCTION PARAMETERS:**
+1. **object:** The object we want hexer to print.
+2. **size:** An offset at which hexer will stop printing bytes.
+3. **highlight_offset:** An offset at which hexer will start highlighting bytes.
+4. **highlight_size:** A size after which hexer will stop highlighting bytes.
+5. **start_offset:** An offset from the start of the object at which hexer will start printing the bytes
+**INPUT:** pass an object pointer and a size [offset from object address], and/or an
+optional highlight range [offset from object address, size of range], and or an 
+optional start_offset\
 **SIDEEFFECT:** pretty prints the address range up to the address of
 object+size in hexadecimal
+#### Advanced Example:
+Let's say we want to inspect the bits of **composed_object.simple_object.just_an_int3**, suppose we want to start printing bytes as hexadecimal but have the highlighted bytes in binary format:
+```c++
+  struct TestObject {
+    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    std::string id{"default"};  // <-- We want to highlight id member
+  };
+  TestObject object{};
+  std::cout << "\nObject as hex, highlight bytes of TestObject::id member:";
+  hexer::print_object_as_hex<hexer::print_as_bits, 4>(
+      object, offsetof(TestObject, id), sizeof(std::string));
+}
+void example5() {
+  struct TestObject {
+    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    std::string id{"default"};  // <-- We want to highlight id member
+  };
+  struct TestObjectComposed {
+    int just_an_int_outer{}, just_an_int_outer2{}, just_an_int_outer3 = 1;
+    TestObject simple_object{};
+    std::string id_outer{"outerdefault"};
+  };
+  TestObjectComposed composed_object{};
+
+  std::cout << "\nAddress of composed_object.simple_object as hexadecimal with composed_object.simple_object.just_an_int3 highlighted and in binary format";
+  hexer::print_address_range_as_hex<hexer::print_as_hex, 8,
+                                    hexer::print_as_bits>(
+      composed_object,  // object we want to print
+      offsetof(TestObjectComposed,
+               id_outer),  // we will stop printing
+                           // bytes at the start of id_outer address
+      offsetof(
+          TestObjectComposed,
+          simple_object.just_an_int3),  // we will highlight from the start of
+                                        // simple_object.just_an_int3 address
+      sizeof(composed_object.simple_object
+                 .just_an_int3),  // we will stop highlighting at the end of
+                                  // simple_object.just_an_int3
+      offsetof(TestObjectComposed,
+               simple_object));  // we will start printing bytes at the start of
+                                 // simple_object address
+```
+This will print:
+
+Address of composed_object.simple_object as hexadecimal with composed_object.simple_object.just_an_int3 highlighted and in binary format\
+00000000&emsp;        0000 0000 0000 0000 **0000000000000001 0000000000000000** 7f8f 0000\
+00000032&emsp;        abd0 43b2 7fff 0000 0007 0000 0000 0000\
+00000048&emsp;        6564 6166 6c75 0074 0000 0000 0000 0000\
+00000064

@@ -81,8 +81,63 @@ void example3() {
                                  // simple_object address
 }
 
+void example4() {
+  hexer::print_as_hex('a');
+  std::cout << '\n';
+  hexer::print_as_hex('\0');
+  std::cout << '\n';
+
+  hexer::print_as_bits('a');
+  std::cout << '\n';
+  hexer::print_as_bits<16>('\0');
+  std::cout << '\n';
+
+  struct TestObject {
+    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    std::string id{"default"};  // <-- We want to highlight id member
+  };
+  TestObject object{};
+  std::cout << "\nObject as hex, highlight bytes of TestObject::id member:";
+  hexer::print_object_as_hex<hexer::print_as_bits, 4>(
+      object, offsetof(TestObject, id), sizeof(std::string));
+}
+void example5() {
+  struct TestObject {
+    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    std::string id{"default"};  // <-- We want to highlight id member
+  };
+  struct TestObjectComposed {
+    int just_an_int_outer{}, just_an_int_outer2{}, just_an_int_outer3 = 1;
+    TestObject simple_object{};
+    std::string id_outer{"outerdefault"};
+  };
+  TestObjectComposed composed_object{};
+
+  std::cout << "\nAddress of composed_object.simple_object as hexadecimal with "
+               "composed_object.simple_object.just_an_int3 highlighted and in "
+               "binary format";
+  hexer::print_address_range_as_hex<hexer::print_as_hex, 8,
+                                    hexer::print_as_bits>(
+      composed_object,  // object we want to print
+      offsetof(TestObjectComposed,
+               id_outer),  // we will stop printing
+                           // bytes at the start of id_outer address
+      offsetof(
+          TestObjectComposed,
+          simple_object.just_an_int3),  // we will highlight from the start of
+                                        // simple_object.just_an_int3 address
+      sizeof(composed_object.simple_object
+                 .just_an_int3),  // we will stop highlighting at the end of
+                                  // simple_object.just_an_int3
+      offsetof(TestObjectComposed,
+               simple_object));  // we will start printing bytes at the start of
+                                 // simple_object address
+}
+
 auto main() -> int {
   // example1();
   // example2();
-  example3();
+  // example3();
+  example4();
+  // example5();
 }
