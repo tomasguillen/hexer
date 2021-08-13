@@ -55,20 +55,34 @@ void example3() {
   };
 
   struct TestObjectComposed {
-    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    int just_an_int_outer{}, just_an_int_outer2{}, just_an_int_outer3 = 1;
     TestObject simple_object{};
     std::string id_outer{"outerdefault"};
   };
   TestObjectComposed composed_object{};
+  std::cout
+      << "\nHere we make use of all the features of "
+         "print_address_range_as_hex (printing the member 'simple_object' "
+         "and highlighting the bytes of its 'just_an_int3' member):";
   hexer::print_address_range_as_hex(
-      composed_object, sizeof(TestObjectComposed),
-      offsetof(TestObjectComposed, simple_object.just_an_int3),
-      sizeof(composed_object.simple_object.just_an_int3),
-      offsetof(TestObjectComposed, simple_object.id));
+      composed_object,  // object we want to print
+      offsetof(TestObjectComposed,
+               id_outer),  // we will stop printing
+                           // bytes at the start of id_outer address
+      offsetof(
+          TestObjectComposed,
+          simple_object.just_an_int3),  // we will highlight from the start of
+                                        // simple_object.just_an_int3 address
+      sizeof(composed_object.simple_object
+                 .just_an_int3),  // we will stop highlighting at the end of
+                                  // simple_object.just_an_int3
+      offsetof(TestObjectComposed,
+               simple_object));  // we will start printing bytes at the start of
+                                 // simple_object address
 }
 
 auto main() -> int {
   // example1();
-  example2();
-  // example3();
+  // example2();
+  example3();
 }
