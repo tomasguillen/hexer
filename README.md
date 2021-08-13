@@ -1,4 +1,5 @@
-## C++ Hexer - Pretty Print C++ objects or arbitrary ranges of memory to hexadecimal or binary form
+## C++ Hexer
+Pretty Print C++ objects or arbitrary ranges of memory to hexadecimal or binary form.
 ## Adding Hexer to your project
 ### 1. CMake 
 ```
