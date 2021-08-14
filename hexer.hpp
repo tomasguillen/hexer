@@ -74,17 +74,11 @@ inline void print_as_hex_highlighted(
 template <void PrintFunction(const char) = print_as_hex,
           size_t NewLineAfterNElements = 8,
           void HighlightedPrintFunction(const char) = print_as_hex, class Type>
-inline void print_address_range_as_hex(
+inline void print_address_range_as_hex_unchecked(
     const Type &object, size_t size,
     std::optional<size_t> highlight_offset = {},
     std::optional<size_t> highlight_size = {},
     std::optional<size_t> start_offset = {}) {
-  HEXER_ASSERT(size <= sizeof(Type),
-               "HEXER_HELP: size="
-                   << size
-                   << " Parameter CANNOT Be Larger Than sizeof(Object Type)="
-                   << sizeof(Type)
-                   << ". Check that you are passing the right size to hexer");
   // NOLINTNEXTLINE
   auto &&char_pointer = reinterpret_cast<const char *>(&object);
   auto start_byte = 0;
@@ -116,6 +110,28 @@ inline void print_address_range_as_hex(
   }
   std::cout << std::dec << '\n';
 }
+
+// wraps print_address_range_as_hex_unchecked version, it provides a size check
+template <void PrintFunction(const char) = print_as_hex,
+          size_t NewLineAfterNElements = 8,
+          void HighlightedPrintFunction(const char) = print_as_hex, class Type>
+inline void print_address_range_as_hex(
+    const Type &object, size_t size,
+    std::optional<size_t> highlight_offset = {},
+    std::optional<size_t> highlight_size = {},
+    std::optional<size_t> start_offset = {}) {
+  HEXER_ASSERT(size <= sizeof(Type),
+               "HEXER_HELP: size="
+                   << size
+                   << " Parameter CANNOT Be Larger Than sizeof(Object Type)="
+                   << sizeof(Type)
+                   << ". Check that you are passing the right size to hexer");
+
+  print_address_range_as_hex_unchecked<PrintFunction, NewLineAfterNElements,
+                                       HighlightedPrintFunction>(
+      object, size, highlight_offset, highlight_size, start_offset);
+}
+
 // INPUT: pass an object and/or an optional highlight range [offset from object
 // address, size of range] SIDEEFFECT: pretty prints the object memory address
 // in hexadecimal

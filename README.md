@@ -346,3 +346,19 @@ We can achieve the same with **print_object_as_hex**:
 	     .just_an_int3));  // we will stop highlighting at the end of
                                   // simple_object.just_an_int3
 ```
+### Caveat:
+Sometimes you may want to print the raw memory of an array or vector, you can do this with **print_address_range_as_hex_unchecked**. Like this:
+```c++
+  struct TestObject {
+    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    std::string id{"default"};
+  };
+  std::array<TestObject, 2> array_of_testobjects{};
+  std::cout << "Size of TestObject:" << sizeof(TestObject) << '\n';
+  hexer::print_address_range_as_hex_unchecked(array_of_testobjects, 50, 5, 8, 4);
+
+  // same but for vector
+  std::vector<TestObject> vector_of_testobjects(2);
+  hexer::print_address_range_as_hex_unchecked(*vector_of_testobjects.data(), 50, 5, 8, 4);
+```
+If we were to use **print_address_range_as_hex** instead, hexer will give an error if compiled in debug mode. The reason is **print_address_range_as_hex** checks that the range you want to print is less or equal to the sizeof(ObjectType), since we are skipping 4 bytes then printing 50, that's more than what the type could hold(48 in this case). Since we aren't dealing with a single object, we have to call **print_address_range_as_hex_unchecked** to disable the size check. You could also just loop through the vector and print each object individually, but this allows you to print addresses between elements if needed.

@@ -1,4 +1,5 @@
 #include "../hexer.hpp"
+#include <vector>
 
 void example1() {
   struct TestObject {
@@ -7,7 +8,8 @@ void example1() {
   };
 
   TestObject object{};
-  std::cout << "EXAMPLE1: \nObject as hex, highlight bytes of TestObject::id member:";
+  std::cout
+      << "EXAMPLE1: \nObject as hex, highlight bytes of TestObject::id member:";
   hexer::print_object_as_hex(object, offsetof(TestObject, id),
                              sizeof(std::string));
 
@@ -60,9 +62,9 @@ void example3a() {
     std::string id_outer{"outerdefault"};
   };
   TestObjectComposed composed_object{};
-  std::cout
-      << "EXAMPLE3: \nprint_address_range_as_hex (printing the member 'simple_object' "
-         "and highlighting the bytes of its 'just_an_int3' member):";
+  std::cout << "EXAMPLE3: \nprint_address_range_as_hex (printing the member "
+               "'simple_object' "
+               "and highlighting the bytes of its 'just_an_int3' member):";
   hexer::print_address_range_as_hex(
       composed_object,  // object we want to print
       offsetof(TestObjectComposed,
@@ -92,7 +94,8 @@ void example3b() {
     std::string id_outer{"outerdefault"};
   };
   TestObjectComposed composed_object{};
-  std::cout << "EXAMPLE3b: \nprint_object_as_hex (printing the member 'simple_object' "
+  std::cout << "EXAMPLE3b: \nprint_object_as_hex (printing the member "
+               "'simple_object' "
                "and highlighting the bytes of its 'just_an_int3' member):";
   hexer::print_object_as_hex(
       composed_object.simple_object,  // object we want to print
@@ -121,7 +124,8 @@ void example4() {
     std::string id{"default"};  // <-- We want to highlight id member
   };
   TestObject object{};
-  std::cout << "EXAMPLE4: \nObject as hex, highlight bytes of TestObject::id member:";
+  std::cout
+      << "EXAMPLE4: \nObject as hex, highlight bytes of TestObject::id member:";
   hexer::print_object_as_hex<hexer::print_as_bits, 4, hexer::print_as_bits>(
       object, offsetof(TestObject, id), sizeof(std::string));
 }
@@ -137,7 +141,8 @@ void example5a() {
   };
   TestObjectComposed composed_object{};
 
-  std::cout << "EXAMPLE5a: \nAddress of composed_object.simple_object as hexadecimal with "
+  std::cout << "EXAMPLE5a: \nAddress of composed_object.simple_object as "
+               "hexadecimal with "
                "composed_object.simple_object.just_an_int3 highlighted and in "
                "binary format";
   hexer::print_address_range_as_hex<hexer::print_as_hex, 8,
@@ -169,19 +174,34 @@ void example5b() {
   };
   TestObjectComposed composed_object{};
 
-  std::cout << "EXAMPLE5b: \nAddress of composed_object.simple_object as hexadecimal with "
+  std::cout << "EXAMPLE5b: \nAddress of composed_object.simple_object as "
+               "hexadecimal with "
                "composed_object.simple_object.just_an_int3 highlighted and in "
                "binary format";
   hexer::print_object_as_hex<hexer::print_as_hex, 8,
-                                    hexer::print_as_bits>(
+                             hexer::print_as_bits>(
       composed_object.simple_object,  // object we want to print
       offsetof(
           TestObjectComposed,
           simple_object.just_an_int3),  // we will highlight from the start of
                                         // simple_object.just_an_int3 address
       sizeof(composed_object.simple_object
-	     .just_an_int3));  // we will stop highlighting at the end of
-                                  // simple_object.just_an_int3
+                 .just_an_int3));  // we will stop highlighting at the end of
+                                   // simple_object.just_an_int3
+}
+
+void example6() {
+  struct TestObject {
+    int just_an_int{}, just_an_int2{}, just_an_int3 = 1;
+    std::string id{"default"};
+  };
+  std::array<TestObject, 2> array_of_testobjects{};
+  std::cout << "Size of TestObject:" << sizeof(TestObject) << '\n';
+  hexer::print_address_range_as_hex_unchecked(array_of_testobjects, 50, 5, 8, 4);
+
+  // same but for vector
+  std::vector<TestObject> vector_of_testobjects(2);
+  hexer::print_address_range_as_hex_unchecked(*vector_of_testobjects.data(), 50, 5, 8, 4);
 }
 auto main() -> int {
   example1();
@@ -191,4 +211,5 @@ auto main() -> int {
   example4();
   example5a();
   example5b();
+  example6();
 }
